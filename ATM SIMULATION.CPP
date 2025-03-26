@@ -966,6 +966,140 @@ int main() {
     int choice;
     do {
         showMenu
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Account {
+    string username;
+    int pin;
+    double balance;
+};
+
+vector<Account> accounts;
+
+void loadAccountsFromFile() {
+    ifstream infile("accounts.txt");
+    Account acc;
+    while (infile >> acc.username >> acc.pin >> acc.balance) {
+        accounts.push_back(acc);
+    }
+    infile.close();
+}
+
+void saveAccountsToFile() {
+    ofstream outfile("accounts.txt");
+    for (auto& acc : accounts) {
+        outfile << acc.username << " " << acc.pin << " " << acc.balance << endl;
+    }
+    outfile.close();
+}
+
+bool authenticate(const string& inputUsername, int inputPin, Account& authenticatedAccount) {
+    for (auto& acc : accounts) {
+        if (acc.username == inputUsername && acc.pin == inputPin) {
+            authenticatedAccount = acc;
+            return true;
+        }
+    }
+    return false;
+}
+
+void showMenu() {
+    cout << "\nATM Menu\n";
+    cout << "1. Check Balance\n";
+    cout << "2. Deposit\n";
+    cout << "3. Withdraw\n";
+    cout << "4. Exit\n";
+    cout << "Enter choice: ";
+}
+
+void deposit(Account& acc) {
+    double depositAmount;
+    cout << "Enter deposit amount: $";
+    cin >> depositAmount;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid deposit amount.\n";
+    } else {
+        acc.balance += depositAmount;
+        cout << "Deposit successful! New balance: $" << acc.balance << endl;
+    }
+}
+
+void withdraw(Account& acc) {
+    double withdrawAmount;
+    cout << "Enter withdraw amount: $";
+    cin >> withdrawAmount;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid withdrawal amount.\n";
+    } else if (withdrawAmount > acc.balance) {
+        cout << "Insufficient funds.\n";
+    } else {
+        acc.balance -= withdrawAmount;
+        cout << "Withdrawal successful! New balance: $" << acc.balance << endl;
+    }
+}
+
+int main() {
+    loadAccountsFromFile();
+
+    string inputUsername;
+    int pin;
+    int attempts = 3;
+    Account authenticatedAccount;
+
+    while (attempts > 0) {
+        cout << "Enter Username: ";
+        cin >> inputUsername;
+        cout << "Enter PIN: ";
+        cin >> pin;
+
+        if (authenticate(inputUsername, pin, authenticatedAccount)) {
+            cout << "Login successful.\n";
+            break;
+        } else {
+            attempts--;
+            cout << "Incorrect Username or PIN. Attempts left: " << attempts << endl;
+        }
+    }
+
+    if (attempts == 0) {
+        cout << "Too many incorrect attempts. Exiting...\n";
+        return 0;
+    }
+
+    int choice;
+    do {
+        showMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Current Balance: $" << authenticatedAccount.balance << endl;
+                break;
+            case 2:
+                deposit(authenticatedAccount);
+                break;
+            case 3:
+                withdraw(authenticatedAccount);
+                break;
+            case 4:
+                saveAccountsToFile();
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
 
 
 
