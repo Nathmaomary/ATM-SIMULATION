@@ -1283,6 +1283,12 @@ def withdraw(self, amount):
         return
     self.balance -= amount
     print(f"Successfully withdrew {amount}. New balance: {self.balance}")
+def deposit(self, amount):
+    if amount <= 0:
+        print("Invalid deposit amount.")
+        return
+    self.balance += amount
+    print(f"Successfully deposited {amount}. New balance: {self.balance}")
 
 
 
