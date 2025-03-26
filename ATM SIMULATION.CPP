@@ -574,6 +574,109 @@ int main() {
     return 0;
 }
 
+#include <iostream>
+#include <string>
+using namespace std;
+
+string username = "user123";
+int userPin = 1234;
+double balance = 1000.0;
+
+bool authenticate(string inputUsername, int inputPin) {
+    return (inputUsername == username && inputPin == userPin);
+}
+
+void showMenu() {
+    cout << "\nATM Menu\n";
+    cout << "1. Check Balance\n";
+    cout << "2. Deposit\n";
+    cout << "3. Withdraw\n";
+    cout << "4. Exit\n";
+    cout << "Enter choice: ";
+}
+
+void deposit() {
+    double depositAmount;
+    cout << "Enter deposit amount: $";
+    cin >> depositAmount;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid deposit amount.\n";
+    } else {
+        balance += depositAmount;
+        cout << "Deposit successful! New balance: $" << balance << endl;
+    }
+}
+
+void withdraw() {
+    double withdrawAmount;
+    cout << "Enter withdraw amount: $";
+    cin >> withdrawAmount;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid withdrawal amount.\n";
+    } else if (withdrawAmount > balance) {
+        cout << "Insufficient funds.\n";
+    } else {
+        balance -= withdrawAmount;
+        cout << "Withdrawal successful! New balance: $" << balance << endl;
+    }
+}
+
+int main() {
+    string inputUsername;
+    int pin;
+    int attempts = 3;
+
+    while (attempts > 0) {
+        cout << "Enter Username: ";
+        cin >> inputUsername;
+        cout << "Enter PIN: ";
+        cin >> pin;
+
+        if (authenticate(inputUsername, pin)) {
+            cout << "Login successful.\n";
+            break;
+        } else {
+            attempts--;
+            cout << "Incorrect Username or PIN. Attempts left: " << attempts << endl;
+        }
+    }
+
+    if (attempts == 0) {
+        cout << "Too many incorrect attempts. Exiting...\n";
+        return 0;
+    }
+
+    int choice;
+    do {
+        showMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Current Balance: $" << balance << endl;
+                break;
+            case 2:
+                deposit();
+                break;
+            case 3:
+                withdraw();
+                break;
+            case 4:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
+
 
 
 
