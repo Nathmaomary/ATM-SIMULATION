@@ -378,6 +378,46 @@ int main() {
 
     return 0;
 }
+#include <iostream>
+#include <string>
+using namespace std;
+
+string username = "user123";
+int userPin = 1234;
+double balance = 1000.0;
+
+bool authenticate(string inputUsername, int inputPin) {
+    return (inputUsername == username && inputPin == userPin);
+}
+
+int main() {
+    string inputUsername;
+    int pin;
+    int attempts = 3;
+
+    while (attempts > 0) {
+        cout << "Enter Username: ";
+        cin >> inputUsername;
+        cout << "Enter PIN: ";
+        cin >> pin;
+
+        if (authenticate(inputUsername, pin)) {
+            cout << "Login successful.\n";
+            break;
+        } else {
+            attempts--;
+            cout << "Incorrect Username or PIN. Attempts left: " << attempts << endl;
+        }
+    }
+
+    if (attempts == 0) {
+        cout << "Too many incorrect attempts. Exiting...\n";
+        return 0;
+    }
+
+    // Menu and other features...
+}
+
 
 
 
