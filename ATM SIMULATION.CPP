@@ -1289,6 +1289,30 @@ def deposit(self, amount):
         return
     self.balance += amount
     print(f"Successfully deposited {amount}. New balance: {self.balance}")
+def display_menu(self):
+    print("ATM Menu:")
+    print("1. Check Balance")
+    print("2. Deposit Money")
+    print("3. Withdraw Money")
+    print("4. Exit")
+    
+def main(self):
+    while True:
+        self.display_menu()
+        choice = input("Please select an option (1-4): ")
+        if choice == '1':
+            print(f"Your current balance is: {self.balance}")
+        elif choice == '2':
+            amount = float(input("Enter amount to deposit: "))
+            self.deposit(amount)
+        elif choice == '3':
+            amount = float(input("Enter amount to withdraw: "))
+            self.withdraw(amount)
+        elif choice == '4':
+            print("Thank you for using the ATM!")
+            break
+        else:
+            print("Invalid option. Please try again.")
 
 
 
