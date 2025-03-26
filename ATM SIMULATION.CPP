@@ -1194,6 +1194,95 @@ int main() {
     while (attempts > 0) {
         cout << "Enter Username: ";
         cin >>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Account {
+    string username;
+    int pin;
+    double balance;
+};
+
+vector<Account> accounts;
+
+void loadAccountsFromFile() {
+    ifstream infile("accounts.txt");
+    Account acc;
+    while (infile >> acc.username >> acc.pin >> acc.balance) {
+        accounts.push_back(acc);
+    }
+    infile.close();
+}
+
+void saveAccountsToFile() {
+    ofstream outfile("accounts.txt");
+    for (auto& acc : accounts) {
+        outfile << acc.username << " " << acc.pin << " " << acc.balance << endl;
+    }
+    outfile.close();
+}
+
+bool authenticate(const string& inputUsername, int inputPin, Account& authenticatedAccount) {
+    for (auto& acc : accounts) {
+        if (acc.username == inputUsername && acc.pin == inputPin) {
+            authenticatedAccount = acc;
+            return true;
+        }
+    }
+    return false;
+}
+
+void showMenu() {
+    cout << "\nATM Menu\n";
+    cout << "1. Check Balance\n";
+    cout << "2. Deposit\n";
+    cout << "3. Withdraw\n";
+    cout << "4. Exit\n";
+    cout << "Enter choice: ";
+}
+
+void deposit(Account& acc) {
+    double depositAmount;
+    cout << "Enter deposit amount: $";
+    cin >> depositAmount;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid deposit amount.\n";
+    } else {
+        acc.balance += depositAmount;
+        cout << "Deposit successful! New balance: $" << acc.balance << endl;
+        ofstream log("atm_transactions.log", ios::app);
+        log << "Deposited: $" << depositAmount << " New balance: $" << acc.balance << endl;
+        log.close();
+    }
+}
+
+void withdraw(Account& acc) {
+    double withdrawAmount;
+    double withdrawalLimit = 1000.0;  // Set a withdrawal limit for demonstration
+    cout << "Enter withdraw amount: $";
+    cin >> withdrawAmount;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid withdrawal amount.\n";
+    } else if (withdrawAmount > acc.balance) {
+        cout << "Insufficient funds.\n";
+    } else if (withdrawAmount > withdrawalLimit) {
+        cout << "Withdrawal limit exceeded. Maximum allowed: $" << withdrawalLimit << endl;
+def withdraw(self, amount):
+    if amount <= 0:
+        print("Invalid amount.")
+        return
+    if amount > self.balance:
+        print("Insufficient funds.")
+        return
+    self.balance -= amount
+    print(f"Successfully withdrew {amount}. New balance: {self.balance}")
 
 
 
