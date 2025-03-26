@@ -417,6 +417,78 @@ int main() {
 
     // Menu and other features...
 }
+#include <iostream>
+#include <string>
+using namespace std;
+
+string username = "user123";
+int userPin = 1234;
+double balance = 1000.0;
+
+bool authenticate(string inputUsername, int inputPin) {
+    return (inputUsername == username && inputPin == userPin);
+}
+
+void showMenu() {
+    cout << "\nATM Menu\n";
+    cout << "1. Check Balance\n";
+    cout << "2. Deposit\n";
+    cout << "3. Withdraw\n";
+    cout << "4. Exit\n";
+    cout << "Enter choice: ";
+}
+
+int main() {
+    string inputUsername;
+    int pin;
+    int attempts = 3;
+
+    while (attempts > 0) {
+        cout << "Enter Username: ";
+        cin >> inputUsername;
+        cout << "Enter PIN: ";
+        cin >> pin;
+
+        if (authenticate(inputUsername, pin)) {
+            cout << "Login successful.\n";
+            break;
+        } else {
+            attempts--;
+            cout << "Incorrect Username or PIN. Attempts left: " << attempts << endl;
+        }
+    }
+
+    if (attempts == 0) {
+        cout << "Too many incorrect attempts. Exiting...\n";
+        return 0;
+    }
+
+    int choice;
+    do {
+        showMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Current Balance: $" << balance << endl;
+                break;
+            case 2:
+                // Deposit functionality
+                break;
+            case 3:
+                // Withdraw functionality
+                break;
+            case 4:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
 
 
 
